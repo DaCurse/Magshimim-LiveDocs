@@ -1,15 +1,17 @@
 const express = require('express');
+const path = require('path');
 const createError = require('http-errors');
 const bodyParser = require('body-parser');
 
 const app = express();
 
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Test index route
-app.get('/', (req, res) => {
-    res.send({success: true, message: "Hello, World!"});
-});
+// Routing
+const pages = require('./routes/pages');
+
+app.use('/', pages);
 
 // Pass 404 error after all routes
 app.use((req, res, next) => {

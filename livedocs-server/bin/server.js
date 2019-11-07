@@ -22,8 +22,13 @@ const server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 server.listen(port);
+
+/**
+ * Event handlers
+ */
 server.on('error', onError);
 server.on('listening', onListening);
+server.on('request', onRequest);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -40,6 +45,13 @@ function normalizePort(val) {
     }
 
     return false;
+}
+
+/**
+ * Event listene for HTTP requests.
+ */
+function onRequest(req, res) {
+    debug(`${req.method} ${req.url}`);
 }
 
 /**
@@ -78,5 +90,3 @@ function onListening() {
         'port ' + addr.port;
     debug('Listening on ' + bind);
 }
-
-module.exports = server;

@@ -7,13 +7,12 @@
   "author": "DaCurse",
   "license": "MIT",
   "scripts": {
-    "dev": "cross-env DEBUG=livedocs:* NODE_ENV=development nodemon --ignore ./tests --exec node ./bin/www",
-    "lint": "jshint ./app.js ./bin/ ./routes/ ./models/ ./controllers/",
+    "dev": "cross-env DEBUG=livedocs:* NODE_ENV=development nodemon --ignore ./tests --exec node ./bin/server",
+    "lint": "jshint ./ --exclude ./node_modules/",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
-    "debug": "^4.1.1",
     "express": "^4.17.1"
   },
   "devDependencies": {
@@ -21,6 +20,7 @@
     "jest": "^24.9.0",
     "jshint": "^2.10.3",
     "nodemon": "^1.19.4",
+    "debug": "^4.1.1",
     "supertest": "^4.0.2"
   },
   "jest": {

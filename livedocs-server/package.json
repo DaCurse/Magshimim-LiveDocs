@@ -1,0 +1,32 @@
+{
+  "name": "livedocs-app",
+  "version": "0.0.1",
+  "description": "LiveDocs' web server.",
+  "main": "app.js",
+  "repository": "https://gitlab.com/DaCurse/livedocs",
+  "author": "DaCurse",
+  "license": "MIT",
+  "scripts": {
+    "dev-win": "cross-env DEBUG=livedocs:* NODE_ENV=development nodemon ./bin/www",
+    "lint": "jshint ./app.js ./bin/ ./routes/ ./models/ ./controllers/",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "debug": "^4.1.1",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "cross-env": "^6.0.3",
+    "jest": "^24.9.0",
+    "jshint": "^2.10.3",
+    "nodemon": "^1.19.4",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  }
+}

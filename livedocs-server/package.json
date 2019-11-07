@@ -7,7 +7,7 @@
   "author": "DaCurse",
   "license": "MIT",
   "scripts": {
-    "dev-win": "cross-env DEBUG=livedocs:* NODE_ENV=development nodemon --ignore ./tests --exec node ./bin/www",
+    "dev": "cross-env DEBUG=livedocs:* NODE_ENV=development nodemon --ignore ./tests --exec node ./bin/www",
     "lint": "jshint ./app.js ./bin/ ./routes/ ./models/ ./controllers/",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000"
   },

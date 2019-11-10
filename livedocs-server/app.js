@@ -9,9 +9,9 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routing
-const pages = require('./routes/pages');
+const index = require('./routes/index');
 
-app.use('/', pages);
+app.use('/', index);
 
 // Pass 404 error after all routes
 app.use((req, res, next) => {

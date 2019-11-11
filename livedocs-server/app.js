@@ -8,23 +8,19 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Routing
-const index = require('./routes/index');
-
-app.use('/', index);
-
 // Pass 404 error after all routes
 app.use((req, res, next) => {
     next(createError(404));
 });
 
 // Error handler
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.send({
         success: false,
         error: err.message
     });
+    next();
 });
 
 module.exports = app;

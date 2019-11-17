@@ -2,18 +2,20 @@
   "name": "livedocs-app",
   "version": "0.0.1",
   "description": "LiveDocs' web server.",
-  "main": "app.js",
   "repository": "https://gitlab.com/DaCurse/livedocs",
   "author": "DaCurse",
   "license": "MIT",
   "scripts": {
     "dev": "cross-env DEBUG=livedocs:* NODE_ENV=development nodemon --ignore ./tests --exec node ./bin/server",
     "lint": "eslint ./",
-    "test": "cross-env NODE_ENV=test jest --watch --testTimeout=10000"
+    "test": "cross-env NODE_ENV=test jest --watch --testTimeout=10000",
+    "migrate": "npx sequelize-cli db:migrate"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mysql2": "^2.0.0",
+    "sequelize": "^5.21.2"
   },
   "devDependencies": {
     "cross-env": "^6.0.3",
@@ -21,6 +23,7 @@
     "eslint": "^6.6.0",
     "jest": "^24.9.0",
     "nodemon": "^1.19.4",
+    "sqlite3": "^4.1.0",
     "supertest": "^4.0.2"
   },
   "jest": {

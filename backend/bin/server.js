@@ -6,6 +6,7 @@
 const app = require('../app');
 const debug = require('debug')('livedocs:server');
 const http = require('http');
+const models = require('../models');
 
 /**
  * Get port from environment and store in Express.
@@ -18,17 +19,18 @@ app.set('port', port);
  */
 const server = http.createServer(app);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
-server.listen(port);
-
-/**
- * Event handlers
- */
-server.on('error', onError);
-server.on('listening', onListening);
-server.on('request', onRequest);
+models.sequelize.sync().then(() => {
+    /**
+     * Listen on provided port, on all network interfaces.
+     */
+    server.listen(port);
+    /**
+     * Event handlers
+     */
+    server.on('error', onError);
+    server.on('listening', onListening);
+    server.on('request', onRequest);
+});
 
 /**
  * Normalize a port into a number, string, or false.

@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "cross-env DEBUG=livedocs:* NODE_ENV=development nodemon --ignore ./tests --exec node ./bin/server",
     "lint": "eslint ./",
-    "test": "cross-env NODE_ENV=test jest --watch --testTimeout=10000"
+    "test": "cross-env NODE_ENV=test jest --watch --testTimeout=10000",
+    "migrate": "npx sequelize-cli db:migrate"
   },
   "dependencies": {
     "body-parser": "^1.19.0",

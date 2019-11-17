@@ -1,14 +1,20 @@
+const debug = require('debug')('livedocs:db');
+
 module.exports = {
     development: {
         username: 'root',
         password: 'root',
         database: 'livedocs_dev',
         host: 'localhost',
-        dialect: 'mysql'
+        dialect: 'mysql',
+        logging: (msg) => {
+            debug(msg);
+        }
     },
     test: {
         dialect: 'sqlite',
-        storage: ':memory:'
+        storage: ':memory:',
+        logging: false
     },
     production: {
         username: process.env.DB_USERNAME,

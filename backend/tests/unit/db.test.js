@@ -5,3 +5,17 @@ describe('Sequelize initialization', () => {
         expect(models.Document).toBeTruthy();
     });
 });
+
+describe('Model creation', () => {
+    beforeAll(() => models.sequelize.sync());
+
+    it('creates a document', () => {
+        return models.Document.create({
+            title: "test",
+            content: "Hello World"
+        }).then(document => {
+            expect(document.title).toBe("test");
+        });
+    });
+
+});

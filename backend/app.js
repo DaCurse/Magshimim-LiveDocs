@@ -17,12 +17,17 @@ app.use('/api/document', document);
 
 // Pass 404 error after all routes
 app.use((req, res, next) => {
-    next(createError(404));
+    next(createError.NotFound());
 });
 
 // Error handler
 app.use((err, req, res, next) => {
-    res.status(err.status || 500);
+    // Account for sequelize-wrapped errors
+    res.status(
+        (err.errors[0].original.status) ?
+            err.errors[0].original.status :
+            err.status || 500
+    );
     res.send({
         success: false,
         error: (app.get('env') === 'development') ? err : {}

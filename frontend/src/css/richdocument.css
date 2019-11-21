@@ -21,3 +21,7 @@
 .RichDocument .document:empty:focus::before {
     content: "";
 }
+
+.RichDocument .error {
+    color: red;
+}

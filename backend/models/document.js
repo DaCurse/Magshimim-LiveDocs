@@ -1,5 +1,5 @@
 const validFilename = require('valid-filename');
-const createError = require('http-errors');
+const { BadRequest } = require('http-errors');
 
 module.exports = (sequelize, DataTypes) => {
     class Document extends sequelize.Sequelize.Model {}
@@ -7,12 +7,16 @@ module.exports = (sequelize, DataTypes) => {
         title: {
             type: DataTypes.STRING,
             validate: {
+                notNull: {
+                    msg: 'Title cannot be empty'
+                },
                 invalidTitle(value) {
                     if (!validFilename(value)) {
-                        throw new createError.BadRequest('Title is invalid');
+                        throw BadRequest('Title is invalid');
                     }
                 }
-            }
+            },
+            allowNull: false
         },
         content: DataTypes.TEXT
     }, { sequelize });

@@ -12,7 +12,7 @@ describe('Document API Endpoint', () => {
             .expect(200, done);
     });
 
-    it('Creates a document', async () => {
+    it('Creates a document and returns it', async () => {
         const res = await request(app)
             .post('/api/document/create')
             .send({
@@ -20,8 +20,18 @@ describe('Document API Endpoint', () => {
             })
             .expect('Content-Type', /json/)
             .expect(200);
+        expect(res.body.document).toBeTruthy();
+    });
 
-        expect(res.body.title).toBe('Test');
+    it('Updates created document', async () => {
+        const res = await request(app)
+            .post('/api/document/update/1')
+            .send({
+                content: 'Hello, World!'
+            })
+            .expect('Content-Type', /json/)
+            .expect(200);
+        expect(res.body.updatedRows).toBe(1);
     });
 
 });

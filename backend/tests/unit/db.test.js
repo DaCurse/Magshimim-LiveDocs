@@ -9,13 +9,12 @@ describe('Sequelize initialization', () => {
 describe('Model creation', () => {
     beforeAll(() => models.sequelize.sync());
 
-    it('Creates a document', () => {
-        return models.Document.create({
+    it('Creates a document', async () => {
+        let document = await models.Document.create({
             title: "test",
             content: "Hello World"
-        }).then(document => {
-            expect(document.title).toBe("test");
         });
+        expect(document.title).toBe("test");
     });
-
+    
 });

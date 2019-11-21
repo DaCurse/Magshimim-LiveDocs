@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const createError = require('http-errors');
+const { NotFound } = require('http-errors');
 const bodyParser = require('body-parser');
 const compression = require('compression');
 
@@ -17,15 +17,26 @@ app.use('/api/document', document);
 
 // Pass 404 error after all routes
 app.use((req, res, next) => {
-    next(createError(404));
+    next(NotFound());
 });
 
 // Error handler
 app.use((err, req, res, next) => {
-    res.status(err.status || 500);
+    res.status(
+        // Account for sequelize-wrapped errors
+        (!err.errors)
+            ? err.status || 500
+            : (err.errors[0].original)
+                ? err.errors[0].original.status 
+                : 400 
+    );
     res.send({
         success: false,
-        error: (app.get('env') === 'development') ? err : {}
+        error: (app.get('env') !== 'development')
+            ? {}
+            : (err.errors)
+                ? err.errors[0].message
+                : err.message
     });
     next();
 });

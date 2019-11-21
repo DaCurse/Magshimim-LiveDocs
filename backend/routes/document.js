@@ -1,38 +1,53 @@
 const express = require('express');
 const router = express.Router();
 const models = require('../models');
-const createError = require('http-errors');
-const validFilename = require('valid-filename');
+const { BadRequest, NotFound } = require('http-errors');
 
 // Wrapper functions to handle errors from promises
 const wrap = fn => (...args) => fn(...args).catch(args[2]);
 
-router.post('/create', wrap(async (req, res, next) => {
-    if (!validFilename(req.body.title)) {
-        next(createError(400, 'Invalid title'));
-        return;
-    }
-    res.json(
-        await models.Document.create({
+router.post('/create', wrap(async (req, res) => {
+    res.json({
+        success: true,
+        document: await models.Document.create({
             title: req.body.title,
             content: req.body.content || '',
         })
-    );
+    });
 }));
 
 router.get('/get/:id', wrap(async (req, res, next) => {
     let id = parseInt(req.params.id);
     if (req.params.id.toLowerCase() === 'all') {
-        res.json(await models.Document.findAll());
+        res.json({success: true, documents: await models.Document.findAll()});
     } else if (!isNaN(id)) {
         let doc = await models.Document.findOne({where: {id: id}});
         if (doc === null) {
-            next(createError(404, 'Document not found'));
+            next(NotFound('Document not found'));
         } else {
-            res.json(doc);
+            res.json({
+                success: true,
+                document: doc
+            });
         }
     } else {
-        next(createError(400, 'Invalid ID'));
+        next(BadRequest('Invalid ID'));
+    }
+}));
+
+router.post('/update/:id', wrap(async (req, res, next) => {
+    let id = parseInt(req.params.id);
+    if (!isNaN(id)) {
+        let rows = await models.Document.update({
+            title: req.body.title,
+            content: req.body.content
+        }, {where: {id: id}});
+        res.json({
+            success: !!rows[0],
+            updatedRows: rows[0]
+        });
+    } else {
+        next(BadRequest('Invalid ID'));
     }
 }));
 

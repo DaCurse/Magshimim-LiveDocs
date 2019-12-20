@@ -43,7 +43,7 @@ router.post('/update/:id', wrap(async (req, res, next) => {
             content: req.body.content
         }, {where: {id: id}});
         res.json({
-            success: !!rows[0],
+            success: true,
             updatedRows: rows[0]
         });
     } else {

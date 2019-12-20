@@ -7,6 +7,7 @@ const app = require('../app');
 const debug = require('debug')('livedocs:server');
 const http = require('http');
 const models = require('../models');
+const websocket = require('../websocket');
 
 /**
  * Get port from environment and store in Express.
@@ -20,6 +21,10 @@ app.set('port', port);
 const server = http.createServer(app);
 
 models.sequelize.sync().then(() => {
+    /**
+     * Initialize WebSocket server to listen on the HTTP Server
+     */
+    websocket.io.attach(server);
     /**
      * Listen on provided port, on all network interfaces.
      */

@@ -25,7 +25,6 @@ class RichDocument extends React.Component {
         fetch('/api/document/get/1')
         .then(res => res.json())
         .then(res => {
-            console.log(res);
             this.setState({
                 isLoaded: true,
                 document: res.document,
@@ -51,11 +50,11 @@ class RichDocument extends React.Component {
         }
 
         // Update document on focus loss
-        this.saveDocument();
+        this.saveDocument(doc.innerHTML);
     }
 
     // Update document on server
-    saveDocument() {
+    saveDocument(content) {
         fetch('/api/document/update/1', {
             method: 'POST',
             headers: {
@@ -63,7 +62,7 @@ class RichDocument extends React.Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                content: this.document.current.innerHTML
+                content
             })
         })
         .then(res => res.json())

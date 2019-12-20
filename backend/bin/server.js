@@ -50,7 +50,7 @@ function normalizePort(val) {
 }
 
 /**
- * Event listene for HTTP requests.
+ * Event listener for HTTP requests.
  */
 function onRequest(req) {
     debug(`${req.method} ${req.url}`);

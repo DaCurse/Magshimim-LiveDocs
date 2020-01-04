@@ -8,8 +8,9 @@
   "scripts": {
     "dev": "cross-env DEBUG=livedocs:* NODE_ENV=development nodemon --ignore ./tests --exec node ./bin/server",
     "lint": "eslint ./",
-    "test": "cross-env NODE_ENV=test jest --watch --testTimeout=10000",
-    "migrate": "npx sequelize-cli db:migrate"
+    "migrate": "sequelize-cli db:migrate",
+    "pretest": "yarn migrate --env=test",
+    "test": "cross-env NODE_ENV=test DEBUG=livedocs:* jest --watch --testTimeout=10000"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -26,6 +27,7 @@
     "eslint": "^6.6.0",
     "jest": "^24.9.0",
     "nodemon": "^1.19.4",
+    "sequelize-cli": "^5.5.1",
     "socket.io-client": "^2.3.0",
     "sqlite3": "^4.1.0",
     "supertest": "^4.0.2"
@@ -34,6 +36,11 @@
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
       "/node_modules/"
-    ]
+    ],
+    "setupFiles": [
+      "<rootDir>/tests/config/setup.js"
+    ],
+    "globalSetup": "<rootDir>/tests/config/global-setup.js",
+    "globalTeardown": "<rootDir>/tests/config/global-teardown.js"
   }
 }

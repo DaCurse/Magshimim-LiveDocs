@@ -1,4 +1,5 @@
 const debug = require('debug')('livedocs:db');
+const path = require('path');
 
 module.exports = {
     development: {
@@ -13,7 +14,7 @@ module.exports = {
     },
     test: {
         dialect: 'sqlite',
-        storage: ':memory:',
+        storage: path.join(__dirname, '../tests/mock/db.sqlite'),
         logging: false
     },
     production: {

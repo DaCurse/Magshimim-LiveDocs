@@ -7,8 +7,6 @@ describe('Sequelize initialization', () => {
 });
 
 describe('Model creation', () => {
-    beforeAll(() => models.sequelize.sync());
-
     it('Creates a document', async () => {
         let document = await models.Document.create({
             title: "test",
@@ -16,5 +14,4 @@ describe('Model creation', () => {
         });
         expect(document.title).toBe("test");
     });
-    
 });

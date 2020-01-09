@@ -3,8 +3,6 @@ const models = require('../../models');
 const app = require('../../app');
 
 describe('Document API Endpoint', () => {
-    beforeAll(() => models.sequelize.sync());
-
     it('Gets all documents', done => {
         request(app)
             .get('/api/document/get/all')
@@ -33,5 +31,4 @@ describe('Document API Endpoint', () => {
             .expect(200);
         expect(res.body.updatedRows).toBe(1);
     });
-
 });

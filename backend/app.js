@@ -16,9 +16,7 @@ const document = require('./routes/document');
 app.use('/api/document', document);
 
 // Pass 404 error after all routes
-app.use((req, res, next) => {
-    next(NotFound());
-});
+app.use((req, res, next) => next(NotFound()));
 
 // Error handler
 app.use((err, req, res, next) => {
@@ -36,7 +34,7 @@ app.use((err, req, res, next) => {
             ? {}
             : (err.errors)
                 ? err.errors[0].message
-                : err.message
+                : err.message || err
     });
     next();
 });

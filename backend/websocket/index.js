@@ -1,24 +1,31 @@
 const io = require('socket.io')({
-    path: '/api/live'
+    path: '/live'
 });
+const { Document } = require('../models');
 const debug = require('debug')('livedocs:websocket');
-const models = require('../models');
 const server = {};
 
 server.io = io;
 
 io.on('connection', socket => {
-    socket.on('edit-document', async data => {
-        let { title, content, id } = data;
-        let rows = await models.Document.update({title, content}, {where: {id}});
-        socket.emit('document-edited', {
-            success: true,
-            updatedRows: rows[0]
-        });
+    let room = 'document';
+
+    // For now, join a default room
+    socket.join(room);
+
+    socket.on('update-document', data => {
+        debug(data);
+        let { change, type, position, document } = data;
+
+        Document.update({
+            content: document.content
+        }, {where: {id: document.id}});
+
+        socket.to(room).emit('document-updated', { change, type, position });
     });
 
-    io.on('disconnect', socket => {
-        debug(`WebSocket disconnect: ID ${socket.id}`);
+    socket.on('disconnect', () => {
+        debug(`WebSocket with ID ${socket.id} disconnected`);
     });
 });
 

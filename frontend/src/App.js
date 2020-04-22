@@ -1,11 +1,11 @@
 import React from 'react';
-import { RichDocument } from './components/RichDocument';
+import { Document } from './components/Document';
 import './css/app.css';
 
 export function App() {
 	return (
 		<div className="App">
-			<RichDocument documentId={1}></RichDocument>
+			<Document documentId={1} />
 		</div>
 	);
 }

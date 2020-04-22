@@ -22,7 +22,7 @@ export function RichDocument(props) {
 	function handleLiveUpdate(data) {}
 
 	function getDocument() {
-		return fetch(`/api/document/get/${documentId}`)
+		return fetch(`/api/document/${documentId}`)
 			.then((res) => res.json())
 			.then((json) => {
 				if (json.success) {

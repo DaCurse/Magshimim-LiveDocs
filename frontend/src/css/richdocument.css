@@ -1,27 +1,27 @@
 .RichDocument {
-    margin: 10px;
+	margin: 10px;
 }
 
 .RichDocument .document {
-    margin: 0 auto;
-    border: 1px solid black;
-    height: 640px;
-    max-height: 640px;
-    width: 540px;
-    padding: 11pt;
-    overflow: auto;
+	margin: 0 auto;
+	border: 1px solid black;
+	height: 640px;
+	max-height: 640px;
+	width: 540px;
+	padding: 11pt;
+	line-height: 18px;
 }
 
 .RichDocument .document:empty::before {
-    content: attr(placeholder);
-    color: #555;
-    font-style: italic;
+	content: attr(placeholder);
+	color: #555;
+	font-style: italic;
 }
 
 .RichDocument .document:empty:focus::before {
-    content: "";
+	content: '';
 }
 
 .RichDocument .error {
-    color: red;
+	color: red;
 }

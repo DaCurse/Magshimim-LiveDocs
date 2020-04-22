@@ -16,6 +16,7 @@
 	"dependencies": {
 		"body-parser": "^1.19.0",
 		"compression": "^1.7.4",
+		"diff-match-patch": "^1.0.4",
 		"express": "^4.17.1",
 		"mysql2": "^2.1.0",
 		"sequelize": "^5.21.6",

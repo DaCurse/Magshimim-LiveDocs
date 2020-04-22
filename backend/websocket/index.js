@@ -1,30 +1,27 @@
 const io = require('socket.io')({
 	path: '/live',
 });
+
 const { Document } = require('../models');
 const debug = require('debug')('livedocs:websocket');
+const DiffMatchPatch = require('diff-match-patch');
 const server = {};
 
 server.io = io;
 
-io.on('connection', (socket) => {
-	let room = 'document';
+io.on('connection', async (socket) => {
+	const room = 'document';
+	const dmp = new DiffMatchPatch();
+	const document = await Document.findOne({ where: { id: 1 } });
 
 	// For now, join a default room
 	socket.join(room);
 
-	socket.on('update-document', (data) => {
-		debug(data);
-		let { change, type, position, document } = data;
-
-		Document.update(
-			{
-				content: document.content,
-			},
-			{ where: { id: document.id } },
-		);
-
-		socket.to(room).emit('document-updated', { change, type, position });
+	socket.on('make-patch', (data) => {
+		const { patch } = data;
+		document.content = dmp.patch_apply(patch, document.content)[0];
+		document.save();
+		socket.to(room).emit('apply-patch', { patch });
 	});
 
 	socket.on('disconnect', () => {

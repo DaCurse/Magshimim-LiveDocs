@@ -1,22 +1,22 @@
 import DiffMatchPatch from 'diff-match-patch';
 import React, { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
-import '../css/richdocument.css';
+import '../css/document-editor.css';
 import {
+	fixContent,
 	getCaretPosition,
 	getCurrentLine,
 	setCaretPosition,
-} from '../util/contenteditable';
+} from '../util/editor';
 
-const socket = io('localhost:8080', { path: '/live' });
+const socket = io('192.168.14.56:8080', { path: '/live' });
 
-export function RichDocument(props) {
+export function DocumentEditor(props) {
 	const { documentId } = props;
 	const [error, setError] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [content, setContent] = useState('');
 	const [title, setTitle] = useState('');
-	const [editQueue, setEditQueue] = useState([]);
 	const document = useRef(null);
 	const dmp = new DiffMatchPatch();
 
@@ -39,19 +39,32 @@ export function RichDocument(props) {
 	}
 
 	function handleLiveUpdate(data) {
-		const patched = dmp.patch_apply(data.patch, document.current.innerHTML);
+		const elem = document.current;
+
+		let caretPosition, line;
+		try {
+			caretPosition = getCaretPosition(elem);
+			line = getCurrentLine(elem);
+		} catch (ignored) {}
+
+		const patched = dmp.patch_apply(data.patch, elem.innerHTML);
 		setContent(patched[0]);
+
+		if (caretPosition != null) {
+			setCaretPosition(elem, line, caretPosition);
+		}
 	}
 
 	function loadDocument(id) {
 		return fetch(`/api/document/${id}`)
 			.then((res) => res.json())
 			.then((json) => {
-				if (json.success) {
-					setContent(json.document.content);
-					setTitle(json.document.title);
+				const { success, document, error } = json;
+				if (success) {
+					setContent(fixContent(document.content));
+					setTitle(document.title);
 				} else {
-					throw new Error(json.error);
+					throw new Error(error);
 				}
 			})
 			.catch((error) => setError(error))
@@ -64,20 +77,20 @@ export function RichDocument(props) {
 	}, []);
 
 	return (
-		<div className="RichDocument">
+		<div className="document-editor">
 			{loading ? (
 				<div>Loading document...</div>
 			) : error ? (
 				<div class="error">{error.toString()}</div>
 			) : (
 				<div
-					className="document"
+					className="editor"
 					contentEditable="true"
 					placeholder="Write something...."
 					ref={document}
 					onBlur={handleBlur}
 					onInput={handleInput}
-					dangerouslySetInnerHTML={{ __html: content || '<div><br/></div>' }}
+					dangerouslySetInnerHTML={{ __html: content }}
 				></div>
 			)}
 		</div>

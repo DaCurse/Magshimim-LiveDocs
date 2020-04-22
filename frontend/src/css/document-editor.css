@@ -1,0 +1,23 @@
+.document-editor {
+	margin: 10px;
+}
+
+.document-editor .editor {
+	margin: 0 auto;
+	border: 1px solid black;
+	height: 75vh;
+	max-height: 75vh;
+	width: 37.5%;
+	padding: 11pt;
+	line-height: 18px;
+	overflow-wrap: normal;
+	overflow: auto;
+}
+
+.document-editor .error {
+	color: red;
+}
+
+.document-editor #temp-caret-finder {
+	display: none;
+}

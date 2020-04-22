@@ -2,7 +2,9 @@ export function getCaretPosition(elem) {
 	var sel = document.getSelection();
 	sel.modify('extend', 'backward', 'paragraphboundary');
 	var pos = sel.toString().length;
-	if (sel.anchorNode != undefined) sel.collapseToEnd();
+	if (sel.anchorNode !== undefined) {
+		sel.collapseToEnd();
+	}
 
 	return pos;
 }
@@ -82,5 +84,18 @@ export function getCurrentLine(elem) {
 	}
 
 	backup.modify('move', 'backward', 'character');
-	return Math.floor((top - elemOffset.top) / lineHeight);
+	return Math.max(0, Math.floor((top - elemOffset.top) / lineHeight));
+}
+
+// Fix content to make sure each newline is wrapped by a div
+export function fixContent(content) {
+	const defaultContent = '<div><br/></div>';
+	const dummy = document.createElement('div');
+	dummy.innerHTML = content;
+	if (dummy.innerText.trim().length === 0) {
+		return defaultContent;
+	} else if (dummy.childNodes[0] instanceof Text) {
+		return `<div>${dummy.childNodes[0].textContent}</div>`;
+	}
+	return content;
 }

@@ -20,6 +20,9 @@ app.set('port', port);
  */
 const server = http.createServer(app);
 
+/**
+ * Sync database with ORM before starting up the server
+ */
 models.sequelize.sync().then(() => {
 	/**
 	 * Initialize WebSocket server to listen on the HTTP Server

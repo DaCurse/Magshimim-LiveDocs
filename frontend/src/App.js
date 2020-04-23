@@ -9,7 +9,11 @@ export function App() {
 	const [jwt, setJwt] = useState(localStorage.getItem('jwt'));
 
 	// Store jwt in localstorage
-	useEffect(() => localStorage.setItem('jwt', jwt), [jwt]);
+	useEffect(() => {
+		if (jwt) {
+			localStorage.setItem('jwt', jwt);
+		}
+	}, [jwt]);
 
 	return (
 		<div className="app">

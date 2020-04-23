@@ -88,14 +88,14 @@ export function getCurrentLine(elem) {
 }
 
 // Fix content to make sure each newline is wrapped by a div
-export function fixContent(content) {
-	const defaultContent = '<div><br/></div>';
-	const dummy = document.createElement('div');
-	dummy.innerHTML = content;
-	if (dummy.innerText.trim().length === 0) {
-		return defaultContent;
-	} else if (dummy.childNodes[0] instanceof Text) {
-		return `<div>${dummy.childNodes[0].textContent}</div>`;
-	}
-	return content;
-}
+// export function fixContent(content) {
+// 	const defaultContent = '<div><br/></div>';
+// 	const dummy = document.createElement('div');
+// 	dummy.innerHTML = content;
+// 	if (dummy.innerText.trim().length === 0) {
+// 		return defaultContent;
+// 	} else if (dummy.childNodes[0] instanceof Text) {
+// 		return `<div>${dummy.childNodes[0].textContent}</div>`;
+// 	}
+// 	return content;
+// }

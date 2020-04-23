@@ -1,15 +1,11 @@
 import React from 'react';
-import RichDocument from './components/RichDocument';
+import { Document } from './components/Document';
 import './css/app.css';
 
-class App extends React.Component {
-    render() {
-        return (
-        <div className = "App">
-            <RichDocument></RichDocument>
-        </div>
-        );
-    }
+export function App() {
+	return (
+		<div className="App">
+			<Document documentId={1} />
+		</div>
+	);
 }
-
-export default App;

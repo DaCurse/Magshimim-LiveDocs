@@ -20,23 +20,24 @@ app.use((req, res, next) => next(NotFound()));
 
 // Error handler
 app.use((err, req, res, next) => {
-    res.status(
-        // Account for sequelize-wrapped errors
-        (!err.errors)
-            ? err.status || 500
-            : (err.errors[0].original)
-                ? err.errors[0].original.status 
-                : 400 
-    );
-    res.send({
-        success: false,
-        error: (app.get('env') !== 'development')
-            ? {}
-            : (err.errors)
-                ? err.errors[0].message
-                : err.message || err
-    });
-    next();
+	res.status(
+		// Account for sequelize-wrapped errors
+		!err.errors
+			? err.status || 500
+			: err.errors[0].original
+			? err.errors[0].original.status
+			: 400,
+	);
+	res.send({
+		success: false,
+		error:
+			app.get('env') !== 'development'
+				? {}
+				: err.errors
+				? err.errors[0].message
+				: err.message || err,
+	});
+	next();
 });
 
 module.exports = app;

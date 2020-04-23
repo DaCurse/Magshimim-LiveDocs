@@ -2,8 +2,12 @@ export function getCaretPosition(elem) {
 	var sel = document.getSelection();
 	sel.modify('extend', 'backward', 'paragraphboundary');
 	var pos = sel.toString().length;
-	if (sel.anchorNode !== undefined) {
-		sel.collapseToEnd();
+	try {
+		if (sel.anchorNode !== undefined) {
+			sel.collapseToEnd();
+		}
+	} catch (e) {
+		return 0;
 	}
 
 	return pos;

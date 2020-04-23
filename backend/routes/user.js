@@ -1,73 +1,40 @@
 const express = require('express');
 const router = express.Router();
-const { Document } = require('../models');
-const { NotFound } = require('http-errors');
-const { wrap, parseIntParam } = require('../util');
+const { User } = require('../models');
+const { NotFound, Unauthorized } = require('http-errors');
+const { wrap, hashPassword, verifyPassword, createJWT } = require('../util');
 
 router.post(
-	'/',
+	'/register',
 	wrap(async (req, res) => {
+		await User.create({
+			username: req.body.username,
+			password: await hashPassword(req.body.password),
+		});
+		// Extract password to not send the hash to the user
+		// eslint-disable-next-line
 		res.json({
 			success: true,
-			document: await Document.create({
-				title: req.body.title,
-				content: req.body.content || '',
-			}),
 		});
 	}),
 );
 
-router.get(
-	'/',
-	wrap(async (req, res) =>
-		res.json({ success: true, documents: await Document.findAll() }),
-	),
-);
-
-router.get(
-	'/:id',
+router.post(
+	'/login',
 	wrap(async (req, res) => {
-		const id = parseIntParam(req.params, 'id');
-		const document = await Document.findOne({ where: { id } });
-		if (document !== null) {
+		const user = await User.findOne({ where: { username: req.body.username } });
+		if (!user) {
+			throw NotFound("User doesn't exist");
+		}
+		if (await verifyPassword(req.body.password, user.password)) {
+			const { id, username } = user;
 			res.json({
 				success: true,
-				document,
+				user: { id, username },
+				jwt: createJWT({ id, username }),
 			});
 		} else {
-			throw NotFound('Document not found');
-		}
-	}),
-);
-
-router.patch(
-	'/:id',
-	wrap(async (req, res) => {
-		const id = parseIntParam(req.params, 'id');
-		const rows = await Document.update(
-			{
-				title: req.body.title,
-				content: req.body.content,
-			},
-			{ where: { id } },
-		);
-		res.json({
-			success: true,
-			updatedRows: rows[0],
-		});
-	}),
-);
-
-router.delete(
-	'/:id',
-	wrap(async (req, res) => {
-		const id = parseIntParam(req.params, 'id');
-		const result = await Document.destroy({ where: { id } });
-		if (result) {
-			res.json({ success: true });
-		} else {
-			res.status(404);
-			res.json({ success: false });
+			throw Unauthorized('Invalid Password');
 		}
 	}),
 );

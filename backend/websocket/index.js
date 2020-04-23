@@ -5,6 +5,7 @@ const io = require('socket.io')({
 const { Document } = require('../models');
 const debug = require('debug')('livedocs:websocket');
 const DiffMatchPatch = require('diff-match-patch');
+const { verifyJWT } = require('../util');
 const server = {};
 const dmp = new DiffMatchPatch();
 
@@ -23,14 +24,35 @@ async function applyNextPatch() {
 applyNextPatch();
 
 io.on('connection', async (socket) => {
-	const room = 'document';
-	const id = 1;
-	// For now, join a default room
-	socket.join(room);
+	// eslint-disable-next-line
+	let userId, username, room;
+
+	socket.use((packet, next) => {
+		const { jwt } = packet[1];
+		if (!jwt) {
+			socket.emit('live-error', {
+				msg: 'Unauthorized. Changes will not be saved.',
+			});
+			return;
+		}
+		try {
+			const token = verifyJWT(jwt);
+			userId = token.data.username;
+			username = token.data.userId;
+		} catch (err) {
+			socket.emit('live-error', 'Invalid JWT.');
+		}
+		next();
+	});
+
+	socket.on('join-document', (data) => {
+		room = data.id;
+		socket.join(room);
+	});
 
 	socket.on('make-patch', (data) => {
 		const { patch } = data;
-		queue.unshift({ patch, id });
+		queue.unshift({ patch, id: room });
 		socket.to(room).emit('apply-patch', { patch });
 	});
 

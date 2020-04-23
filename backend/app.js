@@ -12,8 +12,8 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routing
-const document = require('./routes/document');
-app.use('/api/document', document);
+app.use('/api/document', require('./routes/document'));
+app.use('/api/user', require('./routes/user'));
 
 // Pass 404 error after all routes
 app.use((req, res, next) => next(NotFound()));

@@ -1,6 +1,5 @@
 import DiffMatchPatch from 'diff-match-patch';
 import React, { useEffect, useRef } from 'react';
-import io from 'socket.io-client';
 import '../css/document-editor.css';
 import {
 	getCaretPosition,
@@ -8,11 +7,8 @@ import {
 	setCaretPosition,
 } from '../util/editor';
 
-const socket = io('192.168.14.56:8080', { path: '/live' });
-
 export function DocumentEditor(props) {
-	const content = props.content;
-	const setContent = props.setContent;
+	const { content, setContent, jwt, socket } = props;
 	const editor = useRef(null);
 	const dmp = new DiffMatchPatch();
 
@@ -28,6 +24,7 @@ export function DocumentEditor(props) {
 
 		socket.emit('make-patch', {
 			patch: dmp.patch_make(content, elem.innerHTML),
+			jwt,
 		});
 
 		const caretPosition = getCaretPosition(elem);
@@ -53,7 +50,10 @@ export function DocumentEditor(props) {
 		}
 	}
 
-	useEffect(() => void socket.on('apply-patch', handleLiveUpdate), []);
+	useEffect(() => {
+		socket.on('apply-patch', handleLiveUpdate);
+		socket.on('live-error', (data) => alert(data.msg));
+	}, []);
 
 	return (
 		<div className="document-editor">

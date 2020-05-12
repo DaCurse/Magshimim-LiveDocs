@@ -23,6 +23,7 @@ export function WysiwygMenu() {
 			<WysiwygButton command="fontName" prompt="Enter a font name: ">
 				<span style={{ fontFamily: 'Comic Sans MS' }}>Font</span>
 			</WysiwygButton>
+			<WysiwygButton command="unlink">Remove Link</WysiwygButton>
 			<WysiwygButton command="removeFormat">Remove Style</WysiwygButton>
 		</div>
 	);

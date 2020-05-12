@@ -2,3 +2,7 @@
 	text-align: center;
 	margin: 10px;
 }
+
+.document .document-list {
+	text-align: left;
+}

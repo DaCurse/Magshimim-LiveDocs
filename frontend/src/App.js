@@ -10,8 +10,10 @@ export function App() {
 
 	// Store jwt in localstorage
 	useEffect(() => {
-		if (jwt) {
+		if (jwt != null) {
 			localStorage.setItem('jwt', jwt);
+		} else {
+			localStorage.removeItem('jwt');
 		}
 	}, [jwt]);
 
@@ -26,6 +28,7 @@ export function App() {
 								<li>
 									<Link to="/document">Documents</Link>
 								</li>
+								<button onClick={() => setJwt(null)}>Log out</button>
 							</nav>
 						) : (
 							<nav>

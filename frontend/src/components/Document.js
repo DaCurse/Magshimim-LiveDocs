@@ -9,6 +9,7 @@ const socket = io('192.168.14.56:8080', { path: '/live' });
 
 export function Document(props) {
 	const { jwt } = props;
+	const [documents, _setDocuments] = useState([]);
 	const [content, setContent] = useState('');
 	const [title, setTitle] = useState('');
 	const [id, setId] = useState(null);
@@ -48,8 +49,25 @@ export function Document(props) {
 			.catch((error) => alert(error));
 	}
 
+	function setDocuments(documents) {
+		_setDocuments(
+			documents.map((document, idx) => (
+				<li key={idx}>
+					{document.id} - {document.title}
+				</li>
+			)),
+		);
+	}
+
+	function loadDocuments() {
+		fetch('/api/document', { method: 'GET' })
+			.then((res) => res.json())
+			.then((json) => setDocuments(json.documents));
+	}
+
 	// Join the document's room when you start editing
 	useEffect(() => void socket.emit('join-document', { id, jwt }), [id]);
+	useEffect(() => loadDocuments(), []);
 
 	return jwt ? (
 		<div className="document">
@@ -80,6 +98,10 @@ export function Document(props) {
 						<input type="text" ref={titleInput} placeholder="Enter title..." />
 						<input type="submit" value="Create" />
 					</form>
+					<div className="document-list">
+						<h3>Available documents:</h3>
+						<ul>{documents}</ul>
+					</div>
 				</div>
 			)}
 		</div>

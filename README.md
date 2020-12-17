@@ -6,4 +6,4 @@ This is the source code to my project for my final year in Magshimim. For this p
 
 This project was developed using the Agile methotodolgy with each sprint being added as in issue on Gitlab and tracked via Gitlab Issue Boards.
 
-Due to time constraints, the project isn't polished and has poor test coverage and has some bugs. This project was also used as a high school dissertation, for which I scored 98/100.
+Due to time constraints, the project isn't polished and has poor test coverage and has some bugs. This project was also used as a high school dissertation in the subject of "Systems design and programming", for which I scored 98/100.

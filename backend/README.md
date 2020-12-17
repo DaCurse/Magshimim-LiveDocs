@@ -1,4 +1,4 @@
-# ***REMOVED*** LiveDocs - Server
+# LiveDocs - Server
 
 To start developing - clone & install dependencies via `npm install`.
 To run in dev mode use `npm run dev`.

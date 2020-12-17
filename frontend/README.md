@@ -1,3 +1,3 @@
-# ***REMOVED*** LiveDocs - Front end
+# LiveDocs - Front end
 
-Development project for LiveDocs' React app.
+Development project for LiveDocs' React app
